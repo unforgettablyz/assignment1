@@ -1,0 +1,25 @@
+CREATE TABLE IF NOT EXISTS users (
+  id VARCHAR(100) PRIMARY KEY,
+  name VARCHAR(150) NOT NULL,
+  email VARCHAR(150) NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  role VARCHAR(20) NOT NULL DEFAULT 'student',
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT unique_users_email UNIQUE (email)
+);
+
+CREATE TABLE IF NOT EXISTS appointments (
+  id VARCHAR(100) PRIMARY KEY,
+  student_id VARCHAR(100) NOT NULL,
+  preferred_date DATE NOT NULL,
+  preferred_time TIME NOT NULL,
+  purpose_category VARCHAR(50) NOT NULL,
+  status VARCHAR(20) NOT NULL DEFAULT 'Pending',
+  processed_by VARCHAR(100),
+  processed_at TIMESTAMP,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_appointments_student FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE,
+  CONSTRAINT fk_appointments_processed_by FOREIGN KEY (processed_by) REFERENCES users(id) ON DELETE SET NULL
+);
